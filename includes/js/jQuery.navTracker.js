@@ -2,7 +2,7 @@
 
 /*
  * jQuery.navTracker
- * v0.1
+ * v0.2
  * last updated 2013-01-15
  *
  * A simple plugin to track changes in navigation and update location.hash
@@ -17,16 +17,21 @@
 (function() {
 
   (function($) {
-    var Plugin, pluginName;
+    var Plugin, console, pluginName;
     pluginName = 'navTracker';
+    console = window.console || {
+      log: function() {}
+    };
     Plugin = function(element, options) {
-      var $el, checkTimer, destroy, el, hook, init, option, scrollChecker, scrollPos, updateHash;
+      var $el, checkTimer, current, destroy, el, hook, init, option, scrollChecker, scrollPos, updateHash;
       el = element;
       $el = $(element);
       scrollPos = null;
       checkTimer = null;
+      current = null;
       options = $.extend({}, $.fn[pluginName].defaults, options);
       init = function() {
+        current = options.top;
         scrollChecker();
         return hook('onInit');
       };
@@ -36,34 +41,46 @@
         return hook('onDestroy');
       };
       scrollChecker = function() {
-        var $e, scrolledTo, st;
+        var $e, elems, offsets, result, scrolledTo, st, x, _i, _len;
         if ($(window).scrollTop() !== scrollPos) {
           scrollPos = $(window).scrollTop();
           st = scrollPos + options.offset;
-          scrolledTo = options.top;
+          offsets = [0];
+          elems = {
+            0: options.top
+          };
           if (st > options.offset) {
-            $el.find('a[href^="#"]').each(function() {
+            $el.find('a[href^="#"]').each(function(i) {
               var $e, $loc, hrf, offset;
               $e = $(this);
               hrf = $e.attr('href').replace(/^#/, '');
               if (/^\s*$/.test(hrf) !== true) {
                 $loc = $('#' + hrf);
                 offset = $loc.offset();
-                if (st >= offset.top && st <= offset.top + $loc.outerHeight()) {
-                  scrolledTo = hrf;
-                  return false;
-                }
+                offsets[i] = offset.top;
+                return elems[offset.top] = hrf;
               }
             });
+            offsets.sort(function(a, b) {
+              return b - a;
+            });
           }
-          if (location.hash !== ("#" + scrolledTo)) {
-            $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
-            $el.find("." + options.selectedClass).removeClass(options.selectedClass);
-            $e.addClass(options.selectedClass);
-            updateHash(scrolledTo);
+          result = 0;
+          for (_i = 0, _len = offsets.length; _i < _len; _i++) {
+            x = offsets[_i];
+            if (x <= st) {
+              result = x;
+              break;
+            }
+          }
+          scrolledTo = elems[result] || options.top;
+          $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
+          $el.find("." + options.selectedClass).removeClass(options.selectedClass);
+          $e.addClass(options.selectedClass);
+          updateHash(scrolledTo);
+          if (options.top !== current) {
             hook('onChange');
-          } else if ($el.find("a[href=\"#" + scrolledTo + "\"]." + options.selectedClass).length < $el.find("a[href=\"#" + scrolledTo + "\"]").length) {
-            $el.find("a[href=\"#" + scrolledTo + "\"]").addClass(options.selectedClass);
+            options.top = current;
           }
         }
         return checkTimer = setTimeout(scrollChecker, options.refreshRate);
@@ -99,6 +116,7 @@
       };
       init();
       return {
+        current: current,
         option: option,
         destroy: destroy
       };

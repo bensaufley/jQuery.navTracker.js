@@ -1,6 +1,6 @@
 ###
  * jQuery.navTracker
- * v0.1
+ * v0.2
  * last updated 2013-01-15
  *
  * A simple plugin to track changes in navigation and update location.hash
@@ -18,19 +18,21 @@
   # to make sure it works in IE, and that it's
   # defined for code linters:
   #
-  # console = window.console || log: ->
+  console = window.console || log: ->
 
   Plugin = (element, options) ->
     el         = element
     $el        = $(element)
     scrollPos  = null
     checkTimer = null
+    current    = null
 
     # Implements defaults where the user hasn't defined explicit
     # values for options.
     options = $.extend({}, $.fn[pluginName].defaults, options)
 
     init = ->
+      current = options.top
       scrollChecker()
       hook('onInit')
 
@@ -43,25 +45,31 @@
       if ($(window).scrollTop()!=scrollPos)
         scrollPos = $(window).scrollTop()
         st  = scrollPos + options.offset
-        scrolledTo = options.top
+        offsets = [0]
+        elems   = 0 : options.top
         if (st > options.offset)
-          $el.find('a[href^="#"]').each ->
+          $el.find('a[href^="#"]').each (i) ->
             $e     = $(this)
             hrf    = $e.attr('href').replace(/^#/,'')
             if ((/^\s*$/).test(hrf)!=true)
               $loc   = $('#' + hrf)
               offset = $loc.offset()
-              if (st >= offset.top && st <= offset.top + $loc.outerHeight())
-                scrolledTo = hrf
-                return false
-        if (location.hash!="##{scrolledTo}")
-          $e = $el.find("a[href=\"##{scrolledTo}\"]")
-          $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
-          $e.addClass(options.selectedClass)
-          updateHash(scrolledTo)
+              offsets[i] = offset.top
+              elems[offset.top] = hrf
+          offsets.sort((a,b) -> b-a)
+        result = 0
+        for x in offsets
+          if x <= st
+            result = x
+            break
+        scrolledTo = elems[result] || options.top
+        $e = $el.find("a[href=\"##{scrolledTo}\"]")
+        $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
+        $e.addClass(options.selectedClass)
+        updateHash(scrolledTo)
+        if options.top != current
           hook('onChange')
-        else if ($el.find("a[href=\"##{scrolledTo}\"].#{options.selectedClass}").length < $el.find("a[href=\"##{scrolledTo}\"]").length)
-          $el.find("a[href=\"##{scrolledTo}\"]").addClass(options.selectedClass)
+          options.top = current
       checkTimer = setTimeout(scrollChecker, options.refreshRate)
       
     updateHash = (hash) ->
@@ -95,8 +103,9 @@
 
     # Public Plugin methods
     return {
-      option: option
-      destroy: destroy
+      current : current
+      option  : option
+      destroy : destroy
     }
 
   $.fn[pluginName] = (options) ->
