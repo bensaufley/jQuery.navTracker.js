@@ -80,8 +80,8 @@
             $el.find("." + options.selectedClass).removeClass(options.selectedClass);
             $e.addClass(options.selectedClass);
             updateHash(scrolledTo);
-            hook('onChange');
             options.top = current;
+            hook('onChange');
           }
         }
         return checkTimer = setTimeout(scrollChecker, options.refreshRate);
@@ -112,7 +112,7 @@
       };
       hook = function(hookName) {
         if (options[hookName] !== void 0) {
-          return options[hookName].call(el, options.focused);
+          return options[hookName].call(el, current);
         }
       };
       init();

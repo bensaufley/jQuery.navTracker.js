@@ -70,8 +70,8 @@
           $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
           $e.addClass(options.selectedClass)
           updateHash(scrolledTo)
-          hook('onChange')
           options.top = current
+          hook('onChange')
       checkTimer = setTimeout(scrollChecker, options.refreshRate)
       
     updateHash = (hash) ->
@@ -99,7 +99,7 @@
 
     hook = (hookName) ->
       if (options[hookName] != undefined)
-        options[hookName].call(el,options.focused)
+        options[hookName].call(el,current)
 
     init()
 
