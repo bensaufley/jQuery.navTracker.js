@@ -1,0 +1,134 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../.rvm/gems/ruby-1.9.3-p194/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 10, sass/screen.sass */
+body {
+  font: 300 62.5% sans-serif;
+  color: #333333;
+}
+
+/* line 14, sass/screen.sass */
+nav {
+  font-size: 1.4em;
+  line-height: 1.4em;
+  width: 100%;
+  height: 2em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+/* line 25, sass/screen.sass */
+nav a:link, nav a:visited {
+  display: inline-block;
+  padding: 0.4em 1em 0.2em;
+  color: #f47321;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+/* line 32, sass/screen.sass */
+nav a:link:hover, nav a:visited:hover {
+  border-bottom: 1px solid #f47321;
+}
+/* line 34, sass/screen.sass */
+nav a:link.selected, nav a:visited.selected {
+  color: #333333;
+  border-bottom: 1px dashed #333333;
+}
+
+/* line 38, sass/screen.sass */
+#content {
+  font-size: 1.6em;
+  line-height: 1.4em;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+/* line 44, sass/screen.sass */
+#content article {
+  padding-top: 1.75em;
+}
+/* line 46, sass/screen.sass */
+#content article header {
+  border-bottom: 1px dashed #999999;
+}
+/* line 48, sass/screen.sass */
+#content article header h1 {
+  font-size: 2em;
+  line-height: 1.3125em;
+}
+/* line 51, sass/screen.sass */
+#content article p {
+  margin: 1.4em 0 0;
+}
