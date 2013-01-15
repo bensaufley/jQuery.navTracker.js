@@ -28,11 +28,9 @@
       current = null;
       options = $.extend({}, $.fn[pluginName].defaults, options);
       init = function() {
-        current = options.top;
         if (location.hash) {
           if ($(location.hash)) {
             $('html,body').scrollTop($(location.hash).offset().top);
-            current = location.hash.replace(/^#/, '');
           }
         }
         scrollChecker();
@@ -77,11 +75,11 @@
             }
           }
           scrolledTo = elems[result] || options.top;
-          $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
-          $el.find("." + options.selectedClass).removeClass(options.selectedClass);
-          $e.addClass(options.selectedClass);
-          updateHash(scrolledTo);
-          if (options.top !== current) {
+          if (scrolledTo !== current) {
+            $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
+            $el.find("." + options.selectedClass).removeClass(options.selectedClass);
+            $e.addClass(options.selectedClass);
+            updateHash(scrolledTo);
             hook('onChange');
             options.top = current;
           }
