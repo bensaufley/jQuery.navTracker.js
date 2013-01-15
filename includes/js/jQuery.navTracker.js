@@ -80,7 +80,7 @@
             $el.find("." + options.selectedClass).removeClass(options.selectedClass);
             $e.addClass(options.selectedClass);
             updateHash(scrolledTo);
-            options.top = current;
+            current = scrolledTo;
             hook('onChange');
           }
         }
