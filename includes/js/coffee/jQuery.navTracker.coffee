@@ -18,7 +18,7 @@
   # to make sure it works in IE, and that it's
   # defined for code linters:
   #
-  console = window.console || log: ->
+  # console = window.console || log: ->
 
   Plugin = (element, options) ->
     el         = element
@@ -44,23 +44,20 @@
         scrollPos = $(window).scrollTop()
         st  = scrollPos + options.offset
         scrolledTo = options.top
-        console.log scrolledTo
         if (st > options.offset)
           $el.find('a[href^="#"]').each ->
             $e     = $(this)
             hrf    = $e.attr('href').replace(/^#/,'')
-            $loc   = $('#' + hrf)
-            offset = $loc.offset()
-            if (st >= offset.top && st <= offset.top + $loc.outerHeight())
-              scrolledTo = hrf
-              console.log scrolledTo
-              return false
-            console.log scrolledTo
+            if ((/^\s*$/).test(hrf)!=true)
+              $loc   = $('#' + hrf)
+              offset = $loc.offset()
+              if (st >= offset.top && st <= offset.top + $loc.outerHeight())
+                scrolledTo = hrf
+                return false
         if (location.hash!="##{scrolledTo}")
           $e = $el.find("a[href=\"##{scrolledTo}\"]")
           $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
           $e.addClass(options.selectedClass)
-          console.log scrolledTo
           updateHash(scrolledTo)
           hook('onChange')
         else if ($el.find("a[href=\"##{scrolledTo}\"].#{options.selectedClass}").length < $el.find("a[href=\"##{scrolledTo}\"]").length)
