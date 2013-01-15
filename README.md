@@ -1,2 +1,5 @@
 # jQuery.navTracker.js
-## A simple, lightweight jQuery plugin for visual navigation tracking
+## by Ben Saufley
+### v 0.1
+
+A simple, lightweight jQuery plugin for visual navigation tracking
