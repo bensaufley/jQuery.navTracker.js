@@ -33,6 +33,10 @@
 
     init = ->
       current = options.top
+      if location.hash
+        if $(location.hash)
+          $('html,body').scrollTop($(location.hash).offset().top)
+          current = location.hash.replace(/^#/,'')
       scrollChecker()
       hook('onInit')
 

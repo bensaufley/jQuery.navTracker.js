@@ -2,7 +2,7 @@
 
 /*
  * jQuery.navTracker
- * v0.2
+ * v0.25
  * last updated 2013-01-15
  *
  * A simple plugin to track changes in navigation and update location.hash
@@ -32,6 +32,12 @@
       options = $.extend({}, $.fn[pluginName].defaults, options);
       init = function() {
         current = options.top;
+        if (location.hash) {
+          if ($(location.hash)) {
+            $('html,body').scrollTop($(location.hash).offset().top);
+            current = location.hash.replace(/^#/, '');
+          }
+        }
         scrollChecker();
         return hook('onInit');
       };
