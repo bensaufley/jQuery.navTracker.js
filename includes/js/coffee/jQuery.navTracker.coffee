@@ -18,7 +18,7 @@
   # to make sure it works in IE, and that it's
   # defined for code linters:
   #
-  console = window.console || log: ->
+  # console = window.console || log: ->
 
   Plugin = (element, options) ->
     el         = element

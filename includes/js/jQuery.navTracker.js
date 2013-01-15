@@ -2,7 +2,7 @@
 
 /*
  * jQuery.navTracker
- * v0.25
+ * v0.2
  * last updated 2013-01-15
  *
  * A simple plugin to track changes in navigation and update location.hash
@@ -17,11 +17,8 @@
 (function() {
 
   (function($) {
-    var Plugin, console, pluginName;
+    var Plugin, pluginName;
     pluginName = 'navTracker';
-    console = window.console || {
-      log: function() {}
-    };
     Plugin = function(element, options) {
       var $el, checkTimer, current, destroy, el, hook, init, option, scrollChecker, scrollPos, updateHash;
       el = element;
