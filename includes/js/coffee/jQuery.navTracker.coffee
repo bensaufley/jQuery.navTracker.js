@@ -26,6 +26,9 @@
     scrollPos  = null
     checkTimer = null
     current    = null
+    tops       =
+      offsets    : [0]
+      elems      : {}
 
     # Implements defaults where the user hasn't defined explicit
     # values for options.
@@ -35,36 +38,27 @@
       if location.hash
         if $(location.hash)
           $('html,body').scrollTop($(location.hash).offset().top)
+      refreshTops()
+      $(window).on('resize',refreshTops)
       scrollChecker()
       hook('onInit')
 
     destroy = ->
       clearTimeout(checkTimer)
       $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
+      $(window).off('resize',refreshTops)
       hook('onDestroy')
     
     scrollChecker = ->
       if ($(window).scrollTop()!=scrollPos)
         scrollPos = $(window).scrollTop()
         st  = scrollPos + options.offset
-        offsets = [0]
-        elems   = 0 : options.top
-        if (st > options.offset)
-          $el.find('a[href^="#"]').each (i) ->
-            $e     = $(this)
-            hrf    = $e.attr('href').replace(/^#/,'')
-            if ((/^\s*$/).test(hrf)!=true)
-              $loc   = $('#' + hrf)
-              offset = $loc.offset()
-              offsets[i] = offset.top
-              elems[offset.top] = hrf
-          offsets.sort((a,b) -> b-a)
         result = 0
-        for x in offsets
+        for x in tops.offsets
           if x <= st
             result = x
             break
-        scrolledTo = elems[result] || options.top
+        scrolledTo = tops.elems[result] || options.top
         if scrolledTo != current
           $e = $el.find("a[href=\"##{scrolledTo}\"]")
           $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
@@ -90,6 +84,21 @@
       if (node.length)
         fx.remove()
         node.attr( 'id', hash )
+        
+    refreshTops = ->
+      tops.offsets = [0]
+      tops.elems   = 0 : options.top
+      $el.find('a[href^="#"]').each (i) ->
+        $e     = $(this)
+        hrf    = $e.attr('href').replace(/^#/,'')
+        if ((/^\s*$/).test(hrf)!=true)
+          $loc   = $('#' + hrf)
+          offset = $loc.offset()
+          tops.offsets[i] = offset.top
+          tops.elems[offset.top] = hrf
+      tops.offsets.sort((a,b) -> b-a)
+      console.log tops
+      
 
     option = (key, val) ->
       if (val)
@@ -105,9 +114,11 @@
 
     # Public Plugin methods
     return {
-      current : current
-      option  : option
-      destroy : destroy
+      tops        : tops
+      current     : current
+      option      : option
+      destroy     : destroy
+      refreshTops : refreshTops
     }
 
   $.fn[pluginName] = (options) ->
