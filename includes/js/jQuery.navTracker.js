@@ -90,7 +90,7 @@
         }
         document.location.hash = hash;
         if (node.length) {
-          if (options.legacy || fx.length) {
+          if (options.legacy || (fx !== void 0 && fx.length)) {
             fx.remove();
           }
           return node.attr('id', hash);

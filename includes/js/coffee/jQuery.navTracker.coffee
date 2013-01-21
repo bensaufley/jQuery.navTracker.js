@@ -84,7 +84,7 @@
             .appendTo( document.body )
       document.location.hash = hash
       if (node.length)
-        if options.legacy || fx.length
+        if options.legacy || (fx != undefined && fx.length)
           fx.remove()
         node.attr( 'id', hash )
         
