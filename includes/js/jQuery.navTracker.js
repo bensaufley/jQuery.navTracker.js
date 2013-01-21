@@ -2,8 +2,8 @@
 
 /*
  * jQuery.navTracker
- * v0.2
- * last updated 2013-01-15
+ * v0.25
+ * last updated 2013-01-21
  *
  * A simple plugin to track changes in navigation and update location.hash
  *
@@ -51,29 +51,25 @@
       scrollChecker = function() {
         var $e, result, scrolledTo, st, x, _i, _len, _ref;
         if ($(window).scrollTop() !== scrollPos) {
-          if (current !== document.location.hash) {
-            $('html,body').scrollTop($(document.location.hash).offset().top);
-          } else {
-            scrollPos = $(window).scrollTop();
-            st = scrollPos + options.offset;
-            result = 0;
-            _ref = tops.offsets;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              x = _ref[_i];
-              if (x <= st) {
-                result = x;
-                break;
-              }
+          scrollPos = $(window).scrollTop();
+          st = scrollPos + options.offset;
+          result = 0;
+          _ref = tops.offsets;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            x = _ref[_i];
+            if (x <= st) {
+              result = x;
+              break;
             }
-            scrolledTo = tops.elems[result] || options.top;
-            if (scrolledTo !== current) {
-              $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
-              $el.find("." + options.selectedClass).removeClass(options.selectedClass);
-              $e.addClass(options.selectedClass);
-              updateHash(scrolledTo);
-              current = scrolledTo;
-              hook('onChange');
-            }
+          }
+          scrolledTo = tops.elems[result] || options.top;
+          if (scrolledTo !== current) {
+            $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
+            $el.find("." + options.selectedClass).removeClass(options.selectedClass);
+            $e.addClass(options.selectedClass);
+            updateHash(scrolledTo);
+            current = scrolledTo;
+            hook('onChange');
           }
         }
         return checkTimer = setTimeout(scrollChecker, options.refreshRate);
