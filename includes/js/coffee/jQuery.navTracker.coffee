@@ -35,9 +35,9 @@
     options = $.extend({}, $.fn[pluginName].defaults, options)
 
     init = ->
-      if location.hash
+      if document.location.hash
         if $(location.hash)
-          $('html,body').scrollTop($(location.hash).offset().top)
+          $('html,body').scrollTop($(document.location.hash).offset().top)
       refreshTops()
       $(window).on('resize',refreshTops)
       scrollChecker()
@@ -51,38 +51,44 @@
     
     scrollChecker = ->
       if ($(window).scrollTop()!=scrollPos)
-        scrollPos = $(window).scrollTop()
-        st  = scrollPos + options.offset
-        result = 0
-        for x in tops.offsets
-          if x <= st
-            result = x
-            break
-        scrolledTo = tops.elems[result] || options.top
-        if scrolledTo != current
-          $e = $el.find("a[href=\"##{scrolledTo}\"]")
-          $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
-          $e.addClass(options.selectedClass)
-          updateHash(scrolledTo)
-          current = scrolledTo
-          hook('onChange')
+        if current != document.location.hash
+          $('html,body').scrollTop($(document.location.hash).offset().top)
+        else
+          scrollPos = $(window).scrollTop()
+          st  = scrollPos + options.offset
+          result = 0
+          for x in tops.offsets
+            if x <= st
+              result = x
+              break
+          scrolledTo = tops.elems[result] || options.top
+          if scrolledTo != current
+            $e = $el.find("a[href=\"##{scrolledTo}\"]")
+            $el.find(".#{options.selectedClass}").removeClass(options.selectedClass)
+            $e.addClass(options.selectedClass)
+            updateHash(scrolledTo)
+            current = scrolledTo
+            hook('onChange')
       checkTimer = setTimeout(scrollChecker, options.refreshRate)
       
     updateHash = (hash) ->
       node = $("##{hash}")
       if (node.length)
-        node.attr( 'id', '' );
-        fx = $( '<div></div>' )
-          .css(
-            position   :'absolute'
-            visibility :'hidden'
-            top        : $(document).scrollTop() + 'px'
-          )
-          .attr( 'id', hash )
-          .appendTo( document.body );
-      document.location.hash = hash;
+        node.attr( 'id', '' )
+        if options.legacy
+          fx = $( '<div />' )
+            .css(
+              position   :'absolute'
+              visibility :'hidden'
+              top        : $(document).scrollTop() + 'px'
+              html       : '&nbsp;'
+            )
+            .attr( 'id', hash )
+            .appendTo( document.body )
+      document.location.hash = hash
       if (node.length)
-        fx.remove()
+        if options.legacy || fx.length
+          fx.remove()
         node.attr( 'id', hash )
         
     refreshTops = ->
@@ -146,6 +152,7 @@
     refreshRate   : 100
     offset        : 0
     top           : 'top'
+    legacy        : false
     onInit        : ->
     onChange      : ->
     onDestroy     : ->

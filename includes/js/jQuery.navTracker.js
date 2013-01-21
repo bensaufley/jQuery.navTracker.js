@@ -32,9 +32,9 @@
       };
       options = $.extend({}, $.fn[pluginName].defaults, options);
       init = function() {
-        if (location.hash) {
+        if (document.location.hash) {
           if ($(location.hash)) {
-            $('html,body').scrollTop($(location.hash).offset().top);
+            $('html,body').scrollTop($(document.location.hash).offset().top);
           }
         }
         refreshTops();
@@ -51,25 +51,29 @@
       scrollChecker = function() {
         var $e, result, scrolledTo, st, x, _i, _len, _ref;
         if ($(window).scrollTop() !== scrollPos) {
-          scrollPos = $(window).scrollTop();
-          st = scrollPos + options.offset;
-          result = 0;
-          _ref = tops.offsets;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            x = _ref[_i];
-            if (x <= st) {
-              result = x;
-              break;
+          if (current !== document.location.hash) {
+            $('html,body').scrollTop($(document.location.hash).offset().top);
+          } else {
+            scrollPos = $(window).scrollTop();
+            st = scrollPos + options.offset;
+            result = 0;
+            _ref = tops.offsets;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              x = _ref[_i];
+              if (x <= st) {
+                result = x;
+                break;
+              }
             }
-          }
-          scrolledTo = tops.elems[result] || options.top;
-          if (scrolledTo !== current) {
-            $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
-            $el.find("." + options.selectedClass).removeClass(options.selectedClass);
-            $e.addClass(options.selectedClass);
-            updateHash(scrolledTo);
-            current = scrolledTo;
-            hook('onChange');
+            scrolledTo = tops.elems[result] || options.top;
+            if (scrolledTo !== current) {
+              $e = $el.find("a[href=\"#" + scrolledTo + "\"]");
+              $el.find("." + options.selectedClass).removeClass(options.selectedClass);
+              $e.addClass(options.selectedClass);
+              updateHash(scrolledTo);
+              current = scrolledTo;
+              hook('onChange');
+            }
           }
         }
         return checkTimer = setTimeout(scrollChecker, options.refreshRate);
@@ -79,15 +83,20 @@
         node = $("#" + hash);
         if (node.length) {
           node.attr('id', '');
-          fx = $('<div></div>').css({
-            position: 'absolute',
-            visibility: 'hidden',
-            top: $(document).scrollTop() + 'px'
-          }).attr('id', hash).appendTo(document.body);
+          if (options.legacy) {
+            fx = $('<div />').css({
+              position: 'absolute',
+              visibility: 'hidden',
+              top: $(document).scrollTop() + 'px',
+              html: '&nbsp;'
+            }).attr('id', hash).appendTo(document.body);
+          }
         }
         document.location.hash = hash;
         if (node.length) {
-          fx.remove();
+          if (options.legacy || fx.length) {
+            fx.remove();
+          }
           return node.attr('id', hash);
         }
       };
@@ -164,6 +173,7 @@
       refreshRate: 100,
       offset: 0,
       top: 'top',
+      legacy: false,
       onInit: function() {},
       onChange: function() {},
       onDestroy: function() {}
