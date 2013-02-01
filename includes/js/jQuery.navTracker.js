@@ -112,10 +112,9 @@
             return tops.elems[offset.top] = hrf;
           }
         });
-        tops.offsets.sort(function(a, b) {
+        return tops.offsets.sort(function(a, b) {
           return b - a;
         });
-        return console.log(tops);
       };
       option = function(key, val) {
         if (val) {

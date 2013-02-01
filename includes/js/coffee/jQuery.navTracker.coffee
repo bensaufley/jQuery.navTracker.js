@@ -100,7 +100,7 @@
           tops.offsets[i] = offset.top
           tops.elems[offset.top] = hrf
       tops.offsets.sort((a,b) -> b-a)
-      console.log tops
+      # console.log tops
       
 
     option = (key, val) ->
